@@ -50,12 +50,21 @@ export let getMatrixFromElement = (element: Element) : SVGMatrix => {
 };
 
 //______________________________________________________________________________________________________________________
-export let drag =       ( element               : HTMLElement
-                        , originalMatrix        : SVGMatrix
-                        , Pt_coord_element      : SVGPoint
-                        , Pt_coord_parent       : SVGPoint
-                        ) => {
-	// TO BE DONE
+export let drag = (element: HTMLElement
+    , originalMatrix: SVGMatrix
+    , Pt_coord_element: SVGPoint
+    , Pt_coord_parent: SVGPoint
+) => {
+    let a: number = originalMatrix.a,
+        b: number = originalMatrix.b,
+        c: number = originalMatrix.c,
+        d: number = originalMatrix.d,
+        // On calcule les valeurs e et f en réalisant le produit X' = T * X
+        // e = tx et f = ty avec t -> pt_coord_element
+        e: number = Pt_coord_parent.x - a * Pt_coord_element.x - c * Pt_coord_element.y,
+        f: number = Pt_coord_parent.y - b * Pt_coord_element.x - d * Pt_coord_element.y;
+
+    setMatrixCoordToElement(element, a, b, c, d, e, f);
 };
 
 //______________________________________________________________________________________________________________________
