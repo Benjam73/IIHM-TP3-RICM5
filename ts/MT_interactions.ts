@@ -70,7 +70,13 @@ function multiTouch(element: HTMLElement) : void {
                 eventName: ["touchstart"],
                 useCapture: false,
                 action: (evt : TouchEvent) : boolean => {
-                    // To be completed
+                    evt.preventDefault();
+
+                    let touch: Touch = getRelevantDataFromEvent(evt);
+
+                    Pt2_coord_element = transfo.getPoint(touch.pageX, touch.pageY).matrixTransform(originalMatrix.inverse());
+                    Pt2_coord_parent = transfo.getPoint(touch.pageX, touch.pageY);
+
                     return true;
                 }
             },
@@ -81,7 +87,19 @@ function multiTouch(element: HTMLElement) : void {
                 action: (evt : TouchEvent) : boolean => {
                     evt.preventDefault();
                     evt.stopPropagation();
-                    // To be completed
+                    evt.preventDefault();
+
+                    let touch: Touch = getRelevantDataFromEvent(evt);
+
+                    if (touch.identifier === pointerId_1) {
+                        Pt1_coord_parent = transfo.getPoint(touch.pageX, touch.pageY);
+                    }
+                    if (touch.identifier === pointerId_2) {
+                        Pt2_coord_parent = transfo.getPoint(touch.pageX, touch.pageY);
+                    }
+
+                    transfo.rotozoom(element, originalMatrix, Pt1_coord_element, Pt1_coord_parent, Pt2_coord_element, Pt2_coord_parent);
+
                     return true;
                 }
             },
@@ -91,8 +109,12 @@ function multiTouch(element: HTMLElement) : void {
                 eventName: ["touchend"],
                 useCapture: true,
                 action: (evt : TouchEvent) : boolean => {
-                    const touch = getRelevantDataFromEvent(evt);
-                    // To be completed
+                    evt.preventDefault();
+
+                    let touch: Touch = getRelevantDataFromEvent(evt);
+
+                    Pt1_coord_element = transfo.getPoint(touch.pageX, touch.pageY).matrixTransform(originalMatrix.inverse());
+                    Pt1_coord_parent = transfo.getPoint(touch.pageX, touch.pageY);
                     return true;
                 }
             }
